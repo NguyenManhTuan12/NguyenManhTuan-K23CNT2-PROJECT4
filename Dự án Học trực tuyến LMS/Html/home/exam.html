@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+    
+<head>
+    <meta charset="UTF-8">
+    <title>Làm bài</title>
+
+    <link rel="stylesheet" href="../../CSS/main.css">
+     <link rel="stylesheet" href="../../CSS/exam.css">
+</head>
+
+<body>
+<!-- ===== MODAL CONFIRM ===== -->
+<div id="confirmModal" class="confirm-modal">
+    <div class="confirm-box">
+        <h3>⚠️ Thoát bài thi?</h3>
+        <p>Bạn có chắc muốn thoát? Tiến trình sẽ mất.</p>
+
+        <div class="confirm-actions">
+            <button class="btn-cancel" onclick="closeConfirm()">Hủy</button>
+            <button class="btn-ok" onclick="confirmExit()">Thoát</button>
+        </div>
+    </div>
+</div>
+<div class="exam-container">
+    <!-- NÚT QUAY LẠI -->
+    <button class="btn-back" onclick="goBack()">⬅ Quay lại</button>
+    <div class="timer">⏱️ Thời gian: <span id="time">05:00</span></div>
+    <!-- THANH TIẾN ĐỘ -->
+    <div class="progress-bar">
+        <div id="progress"></div>
+    </div>
+
+    <h2>Làm bài tập</h2>
+
+    <div id="quiz"></div>
+
+    <button onclick="submitQuiz()">Nộp bài</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script src="../../Js/data.js"></script>
+<script src="../../Js/exam.js"></script>
+
+</body>
+</html>

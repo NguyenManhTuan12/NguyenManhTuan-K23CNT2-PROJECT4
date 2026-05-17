@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kho Ưu Đãi | Cyber-LMS Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =======================================================
+            1. BIẾN MÀU SẮC & HEADER ĐỒNG BỘ
+        ======================================================= */
+        :root {
+            --primary: #00d2ff; --secondary: #ff00cc; --accent: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #4a1a4a 50%, #8a2a5a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: white; min-height: 100vh; overflow-x: hidden; }
+
+        .navbar {
+            display: flex !important; justify-content: space-between !important; align-items: center !important;
+            padding: 0 5% !important; height: 90px !important; background: rgba(0, 0, 0, 0.95) !important; 
+            backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 9999; border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-weight: 800 !important; font-size: 30px !important; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; cursor: pointer; }
+        .menu { display: flex !important; gap: 35px !important; list-style: none !important; flex: 1 !important; justify-content: center !important; }
+        .menu li { font-size: 16px !important; font-weight: 600 !important; color: #fff !important; cursor: pointer; transition: 0.3s; }
+        .menu li:hover { color: var(--primary) !important; }
+        .menu li.active { color: var(--primary) !important; }
+        .auth { display: flex !important; align-items: center !important; gap: 20px !important; justify-content: flex-end; }
+        .cart-wrapper { position: relative; cursor: pointer; font-size: 24px; color: #fff; }
+        .cart-badge { position: absolute; top: -7px; right: -9px; background: var(--secondary); color: white; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 50%; border: 2px solid #000; }
+        .user-info { color: var(--primary); font-weight: bold; font-size: 16px; }
+        .btn-logout-nav { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 8px 22px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+        /* =======================================================
+            2. GIAO DIỆN MINI-GAME
+        ======================================================= */
+        .container { padding: 40px 8%; max-width: 1300px; margin: 0 auto; }
+        
+        .game-section {
+            background: rgba(0, 0, 0, 0.4); border: 2px solid var(--primary);
+            border-radius: 35px; padding: 40px; text-align: center; margin-bottom: 50px;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.15); position: relative;
+        }
+        .game-title { font-size: 30px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        
+        .hack-display {
+            background: #000; height: 110px; display: flex; align-items: center; justify-content: center;
+            font-size: 45px; font-weight: 900; color: var(--secondary);
+            margin: 20px auto 30px; max-width: 450px; border-radius: 20px;
+            letter-spacing: 6px; border: 1px solid #333; text-shadow: 0 0 10px var(--secondary);
+        }
+
+        .btn-hack {
+            background: var(--primary); color: #000; padding: 16px 45px; border-radius: 100px;
+            border: none; font-weight: 900; font-size: 16px; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn-hack:hover:not(:disabled) { transform: scale(1.1); box-shadow: 0 0 30px var(--primary); }
+        .btn-hack:disabled { background: #444; opacity: 0.6; cursor: not-allowed; }
+
+        /* =======================================================
+            3. DANH SÁCH MÃ
+        ======================================================= */
+        .list-header { font-size: 24px; font-weight: 800; margin: 40px 0 25px; text-transform: uppercase; border-left: 5px solid var(--primary); padding-left: 15px; }
+        .list-header.my-codes { border-color: var(--secondary); color: var(--secondary); }
+
+        .coupon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+
+        .coupon-card {
+            background: var(--glass); border-radius: 25px; padding: 30px;
+            border: 1px solid var(--glass-border); position: relative;
+            transition: 0.3s; overflow: hidden;
+        }
+        .coupon-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        
+        .coupon-card.mine { border: 1px solid var(--secondary); background: rgba(255, 0, 204, 0.05); }
+        .coupon-card.mine .coupon-val { color: var(--secondary); }
+
+        .coupon-val { font-size: 34px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
+        .coupon-code-label { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; display: block; letter-spacing: 1px; }
+        .coupon-info { font-size: 14px; color: #aaa; line-height: 1.5; margin-bottom: 25px; }
+
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-copy {
+            flex: 2; padding: 12px; background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+            color: #fff; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-copy:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+        .coupon-card.mine .btn-copy:hover { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+
+        /* Nút xóa mã */
+        .btn-delete {
+            flex: 1; padding: 12px; background: rgba(255, 77, 109, 0.1);
+            border: 1px solid var(--accent); border-radius: 12px;
+            color: var(--accent); font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-delete:hover { background: var(--accent); color: #fff; }
+
+        .empty-text { color: #555; font-style: italic; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">CODELEARN</div>
+    <ul class="menu">
+        <li onclick="location.href='index.html'">Trang chủ</li>
+        <li onclick="location.href='learning.html'">Học tập</li>
+        <li onclick="location.href='training.html'">Luyện tập</li> 
+        <li onclick="location.href='order-history.html'">Lịch Sử Đơn Hàng</li>
+        <li onclick="location.href='event.html'">Sự kiện</li>
+        <li onclick="location.href='about.html'">Giới thiệu</li>
+        <li onclick="location.href='coupon.html'" class="active">Mã giảm giá</li>
+    </ul>
+    <div class="auth" id="nav-auth"></div>
+</nav>
+
+<div class="container">
+    
+    <!-- TRÒ CHƠI HACK MÃ -->
+    <section class="game-section">
+        <h2 class="game-title">Cyber Hack Reward</h2>
+        <p style="color: #aaa; margin-bottom: 20px;">Xâm nhập hệ thống để lấy mã giảm giá ngẫu nhiên</p>
+        
+        <div class="hack-display" id="hackResult">??????</div>
+        
+        <button class="btn-hack" id="hackBtn" onclick="startHack()">BẮT ĐẦU HACK</button>
+        <p id="hackStatus" style="margin-top: 15px; color: var(--primary); font-family: monospace; font-size: 13px; min-height: 20px;"></p>
+    </section>
+
+    <!-- KHO MÃ CÁ NHÂN (CÓ NÚT XÓA) -->
+    <h3 class="list-header my-codes">Mã của tôi</h3>
+    <div class="coupon-grid" id="myCouponsList">
+        <p class="empty-text">Bạn chưa hack được mã nào. Hãy thử vận may ở trên!</p>
+    </div>
+
+    <!-- MÃ HỆ THỐNG CÔNG KHAI -->
+    <h3 class="list-header">Ưu đãi cộng đồng</h3>
+    <div class="coupon-grid">
+        <div class="coupon-card">
+            <div class="coupon-val">10% OFF</div>
+            <span class="coupon-code-label">SALE10</span>
+            <p class="coupon-info">Áp dụng cho tất cả các khóa học Web và Python cơ bản.</p>
+            <button class="btn-copy" onclick="copyCode('SALE10')" style="width: 100%;">SAO CHÉP MÃ</button>
+        </div>
+        <div class="coupon-card">
+            <div class="coupon-val">50% OFF</div>
+            <span class="coupon-code-label">NEWBIE50</span>
+            <p class="coupon-info">Dành riêng cho đơn hàng đầu tiên của học viên mới.</p>
+            <button class="btn-copy" onclick="copyCode('NEWBIE50')" style="width: 100%;">SAO CHÉP MÃ</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. ĐỒNG BỘ HEADER
+    function syncHeader() {
+        const userStr = localStorage.getItem('user');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const authDiv = document.getElementById('nav-auth');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            authDiv.innerHTML = `
+                <div class="cart-wrapper" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">${cart.length}</span>
+                </div>
+                <span class="user-info">Chào, ${user.username}</span>
+                <span style="color:rgba(255,255,255,0.2); margin: 0 5px;">|</span>
+                <button class="btn-logout-nav" onclick="handleLogout()">Đăng xuất</button>
+            `;
+        }
+    }
+
+    function handleLogout() { localStorage.removeItem('user'); location.reload(); }
+
+    // 2. LOGIC TRÒ CHƠI
+    const couponPool = [
+        { code: 'NEON90', desc: 'Giảm cực sốc 90% toàn hệ thống' },
+        { code: 'G10VIP', desc: 'Giảm 70% và tặng bộ tài liệu VIP' },
+        { code: 'HACKER30', desc: 'Giảm 30% cho khóa học Pro' },
+        { code: 'PRO500', desc: 'Giảm thẳng 500k cho đơn từ 2 triệu' }
+    ];
+
+    function startHack() {
+        const btn = document.getElementById('hackBtn');
+        const display = document.getElementById('hackResult');
+        const status = document.getElementById('hackStatus');
+        
+        btn.disabled = true;
+        status.innerText = "> Đang giải mã Database...";
+        display.style.color = "var(--secondary)";
+
+        let count = 0;
+        const interval = setInterval(() => {
+            display.innerText = Math.random().toString(36).substring(2, 8).toUpperCase();
+            count++;
+            if(count > 20) {
+                clearInterval(interval);
+                const prize = couponPool[Math.floor(Math.random() * couponPool.length)];
+                display.innerText = prize.code;
+                display.style.color = "#00ff00";
+                status.innerText = "> Hack thành công! Mã đã nằm trong kho của bạn.";
+                saveCoupon(prize);
+                btn.disabled = false;
+            }
+        }, 80);
+    }
+
+    // 3. LOGIC LƯU TRỮ VÀ XÓA MÃ
+    function saveCoupon(couponObj) {
+        let myCoupons = JSON.parse(localStorage.getItem('myCoupons')) || [];
+        // Chỉ lưu nếu mã chưa tồn tại
+        if (!myCoupons.find(c => c.code === couponObj.code)) {
+            myCoupons.push(couponObj);
+            localStorage.setItem('myCoupons', JSON.stringify(myCoupons));
+        }
+        renderMyCoupons();
+    }
+
+    // Hàm xóa mã
+    function deleteCoupon(code) {
+        if(confirm(`Bạn có chắc chắn muốn xóa mã ${code} không?`)) {
+            let myCoupons = JSON.parse(localStorage.getItem('myCoupons')) || [];
+            myCoupons = myCoupons.filter(c => c.code !== code);
+            localStorage.setItem('myCoupons', JSON.stringify(myCoupons));
+            renderMyCoupons();
+        }
+    }
+
+    function renderMyCoupons() {
+        const list = document.getElementById('myCouponsList');
+        const myCoupons = JSON.parse(localStorage.getItem('myCoupons')) || [];
+
+        if (myCoupons.length === 0) {
+            list.innerHTML = `<p class="empty-text">Bạn chưa hack được mã nào. Hãy thử vận may ở trên!</p>`;
+            return;
+        }
+
+        list.innerHTML = myCoupons.map(c => `
+            <div class="coupon-card mine">
+                <div class="coupon-val">HACKED</div>
+                <span class="coupon-code-label">${c.code}</span>
+                <p class="coupon-info">${c.desc}</p>
+                <div class="btn-group">
+                    <button class="btn-copy" onclick="copyCode('${c.code}')">SAO CHÉP</button>
+                    <button class="btn-delete" onclick="deleteCoupon('${c.code}')" title="Xóa mã này">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function copyCode(code) {
+        navigator.clipboard.writeText(code).then(() => alert("Đã sao chép: " + code));
+    }
+
+    window.onload = () => {
+        syncHeader();
+        renderMyCoupons();
+    };
+</script>
+</body>
+</html>

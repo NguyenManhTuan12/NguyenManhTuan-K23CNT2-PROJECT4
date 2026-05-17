@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điều Khiển | Quản Trị Hệ Thống</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../Css/admin.css">
+    <style>
+        /* Tối ưu CSS Dashboard cho Tuấn */
+        :root {
+            --primary: #00d2ff;
+            --secondary: #ff00cc;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+        body { margin: 0; background: #0f0c29; color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        
+        .admin-layout { display: flex; min-height: 100vh; }
+
+        /* SIDEBAR STYLE */
+        .sidebar { 
+            width: 280px; background: rgba(0,0,0,0.4); 
+            backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 0; display: flex; flex-direction: column;
+        }
+        .sidebar h2 { text-align: center; color: var(--primary); letter-spacing: 3px; font-weight: 900; margin-bottom: 50px; }
+        
+        .sidebar-menu { list-style: none; padding: 0; }
+        .sidebar-menu li { 
+            padding: 18px 35px; cursor: pointer; transition: 0.3s; 
+            display: flex; align-items: center; gap: 15px; font-size: 15px; font-weight: 600; color: #bbb;
+        }
+        .sidebar-menu li:hover, .sidebar-menu li.active { 
+            background: rgba(0, 210, 255, 0.1); color: var(--primary); 
+            border-left: 5px solid var(--primary);
+        }
+
+        /* MAIN CONTENT STYLE */
+        .main-content { flex: 1; padding: 50px; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
+        .top-bar h1 { font-size: 32px; font-weight: 800; }
+        
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; }
+        .stat-card { 
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 30px; border-radius: 25px; text-align: center; transition: 0.4s;
+        }
+        .stat-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 40px rgba(0,210,255,0.2); }
+        .stat-card i { font-size: 35px; color: var(--primary); margin-bottom: 20px; display: block; }
+        .stat-num { font-size: 36px; font-weight: 900; color: #fff; }
+        .stat-txt { font-size: 13px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; display: block; }
+
+        .btn-logout-area { margin-top: auto; padding: 20px 35px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .logout-link { color: #ff4d6d; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="admin-layout">
+    <aside class="sidebar">
+        <h2>CYBER ADMIN</h2>
+        <ul class="sidebar-menu">
+            <li class="active" onclick="go('dashboard')"><i class="fas fa-th-large"></i> Dashboard</li>
+            <li onclick="go('courses')"><i class="fas fa-graduation-cap"></i> Khóa học</li>
+            <li onclick="go('quizzes')"><i class="fas fa-pen-nib"></i> Bài thi</li>
+            <li onclick="go('orders')"><i class="fas fa-file-invoice-dollar"></i> Đơn hàng</li>
+            <li onclick="go('events')"><i class="fas fa-bullhorn"></i> Sự kiện</li>
+            <li onclick="go('coupons')"><i class="fas fa-tags"></i> Mã giảm giá</li>
+        </ul>
+        
+        <div class="btn-logout-area">
+            <a class="logout-link" onclick="adminLogout()">
+                <i class="fas fa-power-off"></i> Đăng xuất hệ thống
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <h1>Tổng Quan Dashboard</h1>
+            <div style="font-weight: 600; font-size: 16px;">
+                Chào mừng, <span style="color: var(--primary);" id="admin-display-name">Tuấn Admin</span>
+            </div>
+        </header>
+
+        <section class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <span class="stat-num">120</span>
+                <span class="stat-txt">Tổng Học Viên</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-video"></i>
+                <span class="stat-num">25</span>
+                <span class="stat-txt">Khóa học hiện có</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="stat-num">40</span>
+                <span class="stat-txt">Bài thi đã tạo</span>
+            </div>
+            <div class="stat-card" style="border-color: #2ecc71;">
+                <i class="fas fa-chart-line" style="color: #2ecc71;"></i>
+                <span class="stat-num">50Tr</span>
+                <span class="stat-txt">Tổng doanh thu</span>
+            </div>
+        </section>
+
+       
+    </main>
+</div>
+
+<script src="../../Js/admin.js"></script>
+<script>
+    // Cập nhật tên Admin sau khi xác nhận quyền thành công
+    window.addEventListener('DOMContentLoaded', () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if(user) {
+            document.getElementById('admin-display-name').innerText = user.username;
+        }
+    });
+</script>
+</body>
+</html>

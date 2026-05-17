@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Giới Thiệu | Cyber-LMS Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =======================================================
+            1. BIẾN MÀU SẮC & HEADER ĐỒNG BỘ 100%
+        ======================================================= */
+        :root {
+            --primary: #00d2ff; --secondary: #ff00cc; --accent: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #4a1a4a 50%, #8a2a5a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: white; min-height: 100vh; overflow-x: hidden; }
+
+        /* NAVBAR TO - ĐỀU - ĐẸP */
+        .navbar {
+            display: flex !important; 
+            justify-content: space-between !important; 
+            align-items: center !important;
+            padding: 0 5% !important; 
+            height: 90px !important; 
+            background: rgba(0, 0, 0, 0.95) !important; 
+            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 9999;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-weight: 800 !important; 
+            font-size: 30px !important; 
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .menu { 
+            display: flex !important; 
+            gap: 35px !important; 
+            list-style: none !important; 
+            flex: 1 !important; 
+            justify-content: center !important; 
+        }
+        .menu li { 
+            font-size: 16px !important; 
+            font-weight: 600 !important; 
+            color: #fff !important; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            white-space: nowrap; 
+        }
+        .menu li:hover { color: var(--primary) !important; }
+        .menu li.active { color: var(--primary) !important; }
+
+        .auth { 
+            display: flex !important; 
+            align-items: center !important; 
+            gap: 20px !important; 
+            flex: 0 0 auto;
+            justify-content: flex-end;
+        }
+        
+        .cart-wrapper { position: relative; cursor: pointer; font-size: 24px; color: #fff; transition: 0.3s; }
+        .cart-wrapper:hover { color: var(--primary); }
+        .cart-badge {
+            position: absolute; top: -7px; right: -9px; background: var(--secondary);
+            color: white; font-size: 11px; font-weight: 800; padding: 2px 7px;
+            border-radius: 50%; border: 2px solid #000;
+        }
+
+        .user-info { color: var(--primary); font-weight: bold; font-size: 16px; }
+        .separator { color: rgba(255, 255, 255, 0.2); margin: 0 5px; font-size: 18px; }
+
+        .btn-logout-nav { 
+            background: transparent !important; 
+            color: var(--accent) !important; 
+            border: 1px solid var(--accent) !important;
+            padding: 8px 22px !important; 
+            border-radius: 12px !important; 
+            font-size: 13px !important; 
+            font-weight: 700 !important; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-logout-nav:hover { background: var(--accent) !important; color: white !important; }
+
+        /* =======================================================
+            2. NỘI DUNG TRANG GIỚI THIỆU
+        ======================================================= */
+        .intro-hero { padding: 100px 8% 60px; text-align: center; }
+        .intro-hero h1 { font-size: 55px; font-weight: 900; text-transform: uppercase; margin-bottom: 25px; }
+        .intro-hero p { font-size: 18px; color: #ccc; max-width: 900px; margin: 0 auto; line-height: 1.8; }
+
+        .team-section { padding: 60px 8%; }
+        .section-title { text-align: center; font-size: 36px; font-weight: 900; margin-bottom: 60px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; }
+        .team-card { background: var(--glass); border-radius: 35px; padding: 50px 20px; border: 1px solid var(--glass-border); text-align: center; backdrop-filter: blur(15px); transition: 0.4s; }
+        .team-card:hover { transform: translateY(-15px); border-color: var(--primary); background: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.1); }
+        
+        .avatar-box { width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 25px; border: 3px solid var(--primary); padding: 6px; overflow: hidden; background: rgba(0,0,0,0.3); }
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+        .team-card h3 { font-size: 22px; margin-bottom: 10px; font-weight: 800; }
+        .team-card p { font-size: 14px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .tech-section { background: rgba(0,0,0,0.3); padding: 80px 8%; margin-top: 50px; border-top: 1px solid var(--glass-border); }
+        .tech-grid { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin-top: 50px; }
+        .tech-item { text-align: center; width: 160px; transition: 0.3s; }
+        .tech-item:hover { transform: scale(1.1); color: var(--primary); }
+        .tech-item i { font-size: 60px; color: var(--primary); margin-bottom: 20px; }
+        .tech-item b { display: block; font-size: 18px; font-weight: 700; }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">CODELEARN</div>
+    <ul class="menu">
+        <li onclick="location.href='index.html'">Trang chủ</li>
+        <li onclick="location.href='learning.html'">Học tập</li>
+        <li onclick="location.href='training.html'">Luyện tập</li> 
+        <li onclick="location.href='order-history.html'">Lịch Sử Đơn Hàng</li>
+        <li onclick="location.href='event.html'">Sự kiện</li>
+        <li onclick="location.href='about.html'" class="active">Giới thiệu</li>
+        <li onclick="location.href='coupon.html'">Mã giảm giá</li>
+    </ul>
+    <div class="auth" id="nav-auth"></div>
+</nav>
+
+<section class="intro-hero">
+    <h1>Về Chúng Tôi</h1>
+    <p>Hệ thống <span style="color: var(--primary); font-weight: 800;">Cyber-LMS</span> là nền tảng học tập trực tuyến tiên phong dành cho thế hệ sinh viên công nghệ mới. Chúng tôi cung cấp lộ trình học bài bản, môi trường thực chiến và cộng đồng hỗ trợ 24/7 để mài dũa những kỹ năng IT đỉnh cao.</p>
+</section>
+
+<section class="team-section">
+    <h2 class="section-title">Đội ngũ phát triển</h2>
+    <div class="team-grid">
+        <!-- Leader -->
+        <div class="team-card">
+            <div class="avatar-box">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Du" alt="Dương Chí Dự">
+            </div>
+            <h3>Dương Chí Du</h3>
+            <p>Team Leader / Backend Developer</p>
+        </div>
+
+        <!-- Design -->
+        <div class="team-card">
+            <div class="avatar-box">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hieu" alt="Đinh Văn Hiếu">
+            </div>
+            <h3>Đinh Văn Hiếu</h3>
+            <p>UI/UX Designer</p>
+        </div>
+
+        <!-- Frontend -->
+        <div class="team-card">
+            <div class="avatar-box">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan" alt="Nguyễn Mạnh Tuấn">
+            </div>
+            <h3>Nguyễn Mạnh Tuấn</h3>
+            <p>Frontend Developer</p>
+        </div>
+
+        <!-- Database -->
+        <div class="team-card">
+            <div class="avatar-box">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Anh" alt="Nguyễn Công Quyền Anh">
+            </div>
+            <h3>Nguyễn Công Quyền Anh</h3>
+            <p>Database Admin</p>
+        </div>
+    </div>
+</section>
+
+<section class="tech-section">
+    <h2 class="section-title">Công nghệ cốt lõi</h2>
+    <div class="tech-grid">
+        <div class="tech-item"><i class="fab fa-python"></i><b>Python Flask</b></div>
+        <div class="tech-item"><i class="fas fa-database"></i><b>SQL Server</b></div>
+        <div class="tech-item"><i class="fab fa-html5"></i><b>HTML5 / CSS3</b></div>
+        <div class="tech-item"><i class="fab fa-js"></i><b>JavaScript ES6</b></div>
+    </div>
+</section>
+
+<footer style="padding: 60px; text-align: center; opacity: 0.6; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.05);">
+    &copy; 2026 Nhóm sinh viên Nhóm 10 - K23CNT2 - Đại học Nguyễn Trãi. <br>
+    Hệ thống được phát triển phục vụ mục đích đồ án cuối khóa.
+</footer>
+
+<script>
+    // Logic đếm số lượng giỏ hàng thực tế
+    function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (badge) {
+            badge.innerText = cart.length;
+            badge.style.display = cart.length > 0 ? 'block' : 'none';
+        }
+    }
+
+    // Đồng bộ Header với Trạng thái đăng nhập
+    function syncHeader() {
+        const userStr = localStorage.getItem('user');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const authDiv = document.getElementById('nav-auth');
+        
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            authDiv.innerHTML = `
+                <div class="cart-wrapper" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cart-count">${cart.length}</span>
+                </div>
+                <span class="user-info">Chào, ${user.username}</span>
+                <span class="separator">|</span>
+                <button class="btn-logout-nav" onclick="handleLogout()">Đăng xuất</button>
+            `;
+            updateCartBadge();
+        } else {
+            authDiv.innerHTML = `<a href="../account/login.html" style="color:#fff; text-decoration:none; font-weight:700; font-size:16px;">Đăng nhập</a>`;
+        }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+    }
+
+    window.onload = syncHeader;
+</script>
+
+</body>
+</html>

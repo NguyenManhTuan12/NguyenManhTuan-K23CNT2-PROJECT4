@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch Sử Đơn Hàng | Cyber-LMS Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =======================================================
+           1. BIẾN MÀU SẮC & NỀN
+        ======================================================= */
+        :root {
+            --primary: #00d2ff; --secondary: #ff00cc; --accent: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08); 
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #4a1a4a 50%, #8a2a5a 100%); 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: white; min-height: 100vh; overflow-x: hidden; }
+
+        /* =======================================================
+           2. HEADER ĐỒNG BỘ (TO, ĐỀU, ĐẸP)
+        ======================================================= */
+        .navbar {
+            display: flex !important; 
+            justify-content: space-between !important; 
+            align-items: center !important;
+            padding: 0 5% !important; 
+            height: 90px !important; 
+            background: rgba(0, 0, 0, 0.95) !important; 
+            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 9999;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-weight: 800 !important; 
+            font-size: 30px !important; 
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .menu { 
+            display: flex !important; 
+            gap: 35px !important; 
+            list-style: none !important; 
+            flex: 1 !important; 
+            justify-content: center !important; 
+        }
+        .menu li { 
+            font-size: 16px !important; 
+            font-weight: 600 !important; 
+            color: #fff !important; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            white-space: nowrap; 
+        }
+        .menu li:hover { color: var(--primary) !important; }
+
+        .auth { 
+            display: flex !important; 
+            align-items: center !important; 
+            gap: 20px !important; 
+            flex: 0 0 auto;
+            justify-content: flex-end;
+        }
+        
+        /* CSS Giỏ hàng */
+        .cart-wrapper { position: relative; cursor: pointer; font-size: 24px; color: #fff; transition: 0.3s; }
+        .cart-wrapper:hover { color: var(--primary); }
+        .cart-badge {
+            position: absolute; top: -7px; right: -9px; background: var(--secondary);
+            color: white; font-size: 11px; font-weight: 800; padding: 2px 7px;
+            border-radius: 50%; border: 2px solid #000;
+        }
+
+        .user-info { color: var(--primary); font-weight: bold; font-size: 16px; }
+        .separator { color: rgba(255, 255, 255, 0.2); margin: 0 5px; font-size: 18px; }
+
+        .btn-logout-nav { 
+            background: transparent !important; 
+            color: var(--accent) !important; 
+            border: 1px solid var(--accent) !important;
+            padding: 8px 22px !important; 
+            border-radius: 12px !important; 
+            font-size: 13px !important; 
+            font-weight: 700 !important; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-logout-nav:hover { background: var(--accent) !important; color: white !important; }
+
+        /* =======================================================
+           3. NỘI DUNG LỊCH SỬ ĐƠN HÀNG
+        ======================================================= */
+        .container { padding: 60px 8%; max-width: 1400px; margin: 0 auto; }
+        .header-section { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .header-section h1 { font-size: 36px; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; }
+
+        .history-table-container { background: var(--glass); border-radius: 30px; border: 1px solid var(--glass-border); backdrop-filter: blur(15px); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead { background: rgba(255, 255, 255, 0.05); }
+        th { padding: 25px; font-size: 14px; text-transform: uppercase; color: var(--primary); letter-spacing: 1px; }
+        td { padding: 25px; border-bottom: 1px solid var(--glass-border); font-size: 15px; }
+        tr:last-child td { border-bottom: none; }
+        
+        .status-badge { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+        .status-success { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        
+        .order-items-list { font-size: 14px; color: #ccc; list-style: none; }
+        .order-items-list li::before { content: "• "; color: var(--primary); }
+
+        .empty-state { text-align: center; padding: 100px 0; opacity: 0.5; }
+        .empty-state i { font-size: 80px; margin-bottom: 20px; color: var(--primary); }
+
+        .btn-view { background: var(--primary); border: none; color: #000; padding: 10px 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 14px; font-weight: 800; }
+        .btn-view:hover { transform: scale(1.05); background: #fff; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">CODELEARN</div>
+    <ul class="menu">
+        <li onclick="location.href='index.html'">Trang chủ</li>
+        <li onclick="location.href='learning.html'">Học tập</li>
+        <li onclick="location.href='training.html'">Luyện tập</li> 
+        <li onclick="location.href='order-history.html'" style="color: var(--primary)">Lịch Sử Đơn Hàng</li>
+        <li onclick="location.href='event.html'">Sự kiện</li>
+        <li onclick="location.href='about.html'">Giới thiệu</li>
+        <li onclick="location.href='coupon.html'">Mã giảm giá</li>
+    </ul>
+    <div class="auth" id="nav-auth"></div>
+</nav>
+
+<div class="container">
+    <div class="header-section">
+        <div>
+            <p style="color: var(--primary); font-weight: 800; font-size: 14px; text-transform: uppercase;">Tài khoản học viên</p>
+            <h1>Lịch sử đơn hàng</h1>
+        </div>
+        <button class="btn-view" onclick="location.href='learning.html'">Tiếp tục học tập</button>
+    </div>
+
+    <div class="history-table-container">
+        <table id="historyTable">
+            <thead>
+                <tr>
+                    <th>Mã Đơn</th>
+                    <th>Ngày Mua</th>
+                    <th>Khóa Học</th>
+                    <th>Tổng Tiền</th>
+                    <th>Trạng Thái</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+        </table>
+        <div id="emptyMsg" class="empty-state" style="display: none;">
+            <i class="fas fa-box-open"></i>
+            <p style="font-size: 18px;">Bạn chưa có đơn hàng nào!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hàm tải dữ liệu lịch sử từ localStorage
+    function loadHistory() {
+        const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        const body = document.getElementById('historyBody');
+        const emptyMsg = document.getElementById('emptyMsg');
+        const table = document.getElementById('historyTable');
+
+        if (history.length === 0) {
+            table.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            return;
+        }
+
+        body.innerHTML = history.map(order => `
+            <tr>
+                <td style="font-weight: 800; color: #fff;">#${order.id}</td>
+                <td style="color: #999;">${order.date}</td>
+                <td>
+                    <ul class="order-items-list">
+                        ${order.items.map(item => `<li>${item.title}</li>`).join('')}
+                    </ul>
+                </td>
+                <td style="font-weight: 800; color: var(--primary); font-size: 16px;">${order.total}</td>
+                <td><span class="status-badge status-success">${order.status || 'Thành công'}</span></td>
+            </tr>
+        `).join('');
+    }
+
+    // Hàm đồng bộ Header (Thêm Giỏ hàng)
+    function syncHeader() {
+        const userStr = localStorage.getItem('user');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const navAuth = document.getElementById('nav-auth');
+
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            navAuth.innerHTML = `
+                <div class="cart-wrapper" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">${cart.length}</span>
+                </div>
+                <span class="user-info">Chào, ${user.username}</span>
+                <span class="separator">|</span>
+                <button class="btn-logout-nav" onclick="handleLogout()">Đăng xuất</button>
+            `;
+        } else {
+            navAuth.innerHTML = `<a href="../account/login.html" style="color:#fff; text-decoration:none; font-weight:700; font-size:15px;">Đăng nhập</a>`;
+        }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('user');
+        location.href = 'index.html';
+    }
+
+    window.onload = () => {
+        syncHeader();
+        loadHistory();
+    };
+</script>
+</body>
+</html>

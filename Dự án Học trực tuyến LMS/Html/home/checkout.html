@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán An Toàn | Cyber-LMS Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =======================================================
+           1. HỆ THỐNG MÀU & STYLE (GLASSMORPHISM)
+        ======================================================= */
+        :root {
+            --primary: #00d2ff; --secondary: #ff00cc; --accent: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08); --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-gradient: linear-gradient(135deg, #2c1a4d, #c33764); 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: white; min-height: 100vh; overflow-x: hidden; }
+
+        /* NAVBAR TỐI GIẢN */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 8%; height: 80px; background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-weight: 800; font-size: 26px; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; cursor: pointer; }
+        .back-link { color: #ccc; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .back-link:hover { color: var(--primary); }
+
+        /* BƯỚC THANH TOÁN */
+        .checkout-steps { display: flex; justify-content: center; gap: 40px; padding: 30px 0; }
+        .step { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.3); font-weight: 700; font-size: 13px; }
+        .step.active { color: var(--primary); }
+        .step.done { color: #2ecc71; }
+        .step-circle { width: 30px; height: 30px; border-radius: 50%; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; }
+
+        .container { display: grid; grid-template-columns: 1fr 400px; gap: 30px; padding: 0 8% 80px 8%; }
+
+        /* CỘT TRÁI */
+        .section-box { background: var(--glass); border-radius: 30px; border: 1px solid var(--glass-border); padding: 35px; backdrop-filter: blur(20px); margin-bottom: 30px; }
+        .section-box h2 { font-size: 20px; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; text-transform: uppercase; }
+        .section-box h2 i { color: var(--primary); }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 13px; color: #aaa; }
+        .input-group input { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 12px 15px; border-radius: 12px; color: white; outline: none; }
+        .input-group input:focus { border-color: var(--primary); }
+
+        .payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .pay-card { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; cursor: pointer; text-align: center; transition: 0.3s; }
+        .pay-card.active { border-color: var(--primary); background: rgba(0,210,255,0.1); color: var(--primary); }
+        .pay-card i { font-size: 24px; margin-bottom: 8px; display: block; }
+
+        .qr-display { text-align: center; background: rgba(0,0,0,0.2); padding: 30px; border-radius: 25px; margin-top: 25px; }
+        .qr-display img { width: 180px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 15px; }
+        .order-code { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 10px; font-weight: 800; color: var(--secondary); display: inline-block; }
+
+        /* CỘT PHẢI */
+        .summary-card { background: rgba(0,0,0,0.4); border: 2px solid var(--primary); border-radius: 35px; padding: 30px; position: sticky; top: 100px; }
+        .summary-card h3 { font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
+        .order-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; color: #ccc; }
+        .total-price { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; font-size: 24px; font-weight: 900; }
+
+        .btn-confirm { width: 100%; padding: 18px; background: linear-gradient(90deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 15px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 25px; transition: 0.3s; }
+        .btn-confirm:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,0,204,0.4); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">CODELEARN</div>
+    <a href="cart.html" class="back-link"><i class="fas fa-chevron-left"></i> Quay lại giỏ hàng</a>
+</nav>
+
+<div class="checkout-steps">
+    <div class="step done"><div class="step-circle"><i class="fas fa-check"></i></div> GIỎ HÀNG</div>
+    <div class="step active"><div class="step-circle">2</div> THANH TOÁN</div>
+    <div class="step"><div class="step-circle">3</div> HOÀN TẤT</div>
+</div>
+
+<div class="container">
+    <main>
+        <div class="section-box">
+            <h2><i class="fas fa-user-circle"></i> Thông tin học viên</h2>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Họ và Tên</label>
+                    <input type="text" id="user_name" placeholder="Nguyễn Mạnh Tuấn">
+                </div>
+                <div class="input-group">
+                    <label>Email liên hệ</label>
+                    <input type="email" id="user_email" placeholder="tuan@example.com">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Số điện thoại</label>
+                <input type="text" id="user_phone" placeholder="09xx xxx xxx">
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2><i class="fas fa-wallet"></i> Phương thức thanh toán</h2>
+            <div class="payment-options">
+                <div class="pay-card active" onclick="switchPay('bank', this)">
+                    <i class="fas fa-university"></i>
+                    <strong>Ngân hàng</strong>
+                </div>
+                <div class="pay-card" onclick="switchPay('momo', this)">
+                    <i class="fas fa-mobile-alt"></i>
+                    <strong>Ví MoMo</strong>
+                </div>
+            </div>
+
+            <div class="qr-display">
+                <p id="pay-text" style="font-size: 14px; opacity: 0.7; margin-bottom: 15px;">Quét mã QR để chuyển khoản Vietcombank</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CyberLMS_Tuấn" id="qr-img">
+                <p style="font-size: 13px; margin-top: 10px;">Nội dung thanh toán:</p>
+                <div class="order-code" id="order-id">LMS9999</div>
+            </div>
+        </div>
+    </main>
+
+    <aside>
+        <div class="summary-card">
+            <h3>Đơn hàng của bạn</h3>
+            <div id="order-list"></div>
+            <div class="total-price">
+                <span>Tổng tiền:</span>
+                <span id="total-amount" style="color: var(--primary);">0 đ</span>
+            </div>
+            <button class="btn-confirm" onclick="processCheckout()">XÁC NHẬN THANH TOÁN</button>
+            <p style="text-align: center; font-size: 11px; color: #777; margin-top: 15px;"><i class="fas fa-lock"></i> Thanh toán an toàn qua cổng CyberPay</p>
+        </div>
+    </aside>
+</div>
+
+<script>
+    // 1. Tải đơn hàng từ giỏ hàng
+    function initCheckout() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const container = document.getElementById('order-list');
+        const totalDisp = document.getElementById('total-amount');
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if(user) document.getElementById('user_name').value = user.username;
+        if(cart.length === 0) {
+            alert("Giỏ hàng trống!"); window.location.href = 'learning.html'; return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map(item => {
+            total += parseInt(item.price);
+            return `<div class="order-item"><span>${item.title}</span><b>${Number(item.price).toLocaleString('vi-VN')} đ</b></div>`;
+        }).join('');
+
+        totalDisp.innerText = total.toLocaleString('vi-VN') + " đ";
+        document.getElementById('order-id').innerText = "LMS" + Math.floor(1000 + Math.random() * 8999);
+    }
+
+    // 2. Đổi QR
+    function switchPay(type, el) {
+        document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        const txt = document.getElementById('pay-text');
+        const img = document.getElementById('qr-img');
+
+        if(type === 'momo') {
+            txt.innerText = "Mở MoMo quét mã để thanh toán";
+            img.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Momo_Payment";
+        } else {
+            txt.innerText = "Quét mã QR để chuyển khoản Ngân hàng";
+            img.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Bank_Payment";
+        }
+    }
+
+    // 3. Xử lý thanh toán + Lưu lịch sử
+    function processCheckout() {
+        if(!document.getElementById('user_name').value) { alert("Nhập tên nhé!"); return; }
+
+        const cart = JSON.parse(localStorage.getItem('cart'));
+        const total = document.getElementById('total-amount').innerText;
+        const id = document.getElementById('order-id').innerText;
+
+        // Lưu vào History
+        const order = { id, total, date: new Date().toLocaleString('vi-VN'), items: cart, status: 'Hoàn tất' };
+        let history = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        history.unshift(order);
+        localStorage.setItem('orderHistory', JSON.stringify(history));
+
+        const btn = document.querySelector('.btn-confirm');
+        btn.innerText = "ĐANG XÁC THỰC...";
+        btn.disabled = true;
+
+        setTimeout(() => {
+            alert("🎉 Thanh toán thành công! Chúc Tuấn học tốt.");
+            localStorage.removeItem('cart');
+            window.location.href = 'index.html';
+        }, 1500);
+    }
+
+    window.onload = initCheckout;
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống LMS Cyber | CodeLearn Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =======================================================
+           1. BIẾN MÀU SẮC & NỀN
+        ======================================================= */
+        :root {
+            --primary: #00d2ff; --secondary: #ff00cc; --accent: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #4a1a4a 50%, #8a2a5a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: white; overflow-x: hidden; }
+
+        /* =======================================================
+           2. HEADER CHUẨN TỈ LỆ - CHỮ ĐÃ ĐƯỢC PHÓNG TO VỪA PHẢI
+        ======================================================= */
+        .navbar {
+            display: flex !important; 
+            justify-content: space-between !important; 
+            align-items: center !important;
+            padding: 0 5% !important; 
+            height: 90px !important; /* Tăng nhẹ chiều cao để cân bằng với chữ to */
+            background: rgba(0, 0, 0, 0.95) !important; 
+            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 9999;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-weight: 800 !important; 
+            font-size: 30px !important; /* Logo tăng nhẹ lên 30px */
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .menu { 
+            display: flex !important; 
+            gap: 35px !important; /* Giãn cách menu đều hơn */
+            list-style: none !important; 
+            flex: 1 !important; 
+            justify-content: center !important; 
+        }
+        .menu li { 
+            font-size: 16px !important; /* TĂNG SIZE CHỮ: từ 14px lên 16px */
+            font-weight: 600 !important; 
+            color: #fff !important; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            white-space: nowrap; 
+        }
+        .menu li:hover { color: var(--primary) !important; }
+
+        .auth { 
+            display: flex !important; 
+            align-items: center !important; 
+            gap: 20px !important; 
+            flex: 0 0 auto;
+            justify-content: flex-end;
+        }
+        
+        .cart-wrapper { position: relative; cursor: pointer; font-size: 24px; color: #fff; }
+        .cart-badge {
+            position: absolute; top: -7px; right: -9px; background: var(--secondary);
+            color: white; font-size: 11px; font-weight: 800; padding: 2px 7px;
+            border-radius: 50%; border: 2px solid #000;
+        }
+
+        .user-info { color: var(--primary); font-weight: bold; font-size: 16px; } /* TĂNG SIZE CHÀO USER */
+        .separator { color: rgba(255, 255, 255, 0.2); margin: 0 5px; font-size: 18px; }
+
+        .btn-logout-nav { 
+            background: transparent !important; 
+            color: var(--accent) !important; 
+            border: 1px solid var(--accent) !important;
+            padding: 8px 22px !important; 
+            border-radius: 12px !important; 
+            font-size: 13px !important; /* Tăng size chữ nút đăng xuất */
+            font-weight: 700 !important; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-logout-nav:hover { background: var(--accent) !important; color: white !important; }
+
+        /* =======================================================
+           3. PHẦN NỘI DUNG (GIỮ NGUYÊN 100%)
+        ======================================================= */
+        .hero { display: flex; align-items: center; padding: 60px 8%; min-height: 80vh; gap: 50px; }
+        .hero-left { flex: 1.2; }
+        .hero-left h1 { font-size: 50px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
+        
+        .features { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .features div { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #ccc; }
+        .features div i { color: var(--primary); }
+
+        .hero-right { flex: 0.8; }
+        .card-glass { 
+            background: var(--glass); padding: 45px; border-radius: 35px; 
+            border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
+        }
+
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 18px; color: #777; }
+        .input-group input { 
+            width: 100%; padding: 15px 15px 15px 45px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; outline: none;
+        }
+
+        .btn-main { 
+            width: 100%; padding: 16px; background: var(--primary); border: none; 
+            border-radius: 15px; font-weight: 800; color: #000; cursor: pointer; transition: 0.3s;
+        }
+
+        .stats-bar { display: flex; justify-content: space-around; padding: 40px 8%; background: rgba(0,0,0,0.2); }
+        .stat-item { text-align: center; }
+        .stat-item h2 { font-size: 32px; color: var(--primary); font-weight: 800; }
+        .stat-item p { font-size: 11px; color: #999; text-transform: uppercase; margin-top: 5px; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">CODELEARN</div>
+    <ul class="menu">
+        <li onclick="location.href='index.html'" style="color: var(--primary)">Trang chủ</li>
+        <li onclick="location.href='learning.html'">Học tập</li>
+        <li onclick="location.href='training.html'">Luyện tập</li> 
+        <li onclick="location.href='order-history.html'">Lịch Sử Đơn Hàng</li>
+        <li onclick="location.href='event.html'">Sự kiện</li>
+        <li onclick="location.href='about.html'">Giới thiệu</li>
+        <li onclick="location.href='coupon.html'">Mã giảm giá</li>
+    </ul>
+    <div class="auth" id="nav-auth"></div>
+</nav>
+
+<div class="hero">
+    <div class="hero-left">
+        <h1>Nền tảng học lập trình <br><span style="color: var(--primary);">trực tuyến hiện đại</span></h1>
+        <p style="color: #bdc3c7; font-size: 18px; margin-top: 20px;">Học cùng chuyên gia, thực chiến dự án thực tế từ các tập đoàn công nghệ lớn.</p>
+        
+        <div class="features">
+            <div><i class="fas fa-check-circle"></i> 50+ Khóa học chuyên sâu</div>
+            <div><i class="fas fa-check-circle"></i> Giảng viên hỗ trợ 24/7</div>
+            <div><i class="fas fa-check-circle"></i> Chứng chỉ hoàn thành uy tín</div>
+            <div><i class="fas fa-check-circle"></i> Lộ trình học bài bản</div>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <div class="card-glass" id="home-login-card">
+            <h3 style="text-align: center; margin-bottom: 30px;">Tham gia học tập</h3>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="home_username" placeholder="Tên tài khoản">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="home_password" placeholder="Mật khẩu">
+            </div>
+            <button class="btn-main" onclick="handleHomeLogin()">ĐĂNG NHẬP NGAY</button>
+            <p style="text-align:center; margin-top:20px; font-size:13px; color: #999;">
+                Mới tham gia? <a href="../account/register.html" style="color:var(--primary); text-decoration: none;">Đăng ký ngay</a>
+            </p>
+        </div>
+        
+        <div class="card-glass hidden" id="home-welcome-card" style="text-align: center;">
+            <div style="font-size: 60px; color: var(--primary); margin-bottom: 20px;">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h3>Chào mừng trở lại, <br><span id="display-user-name" style="color: var(--secondary);">Thành viên</span>!</h3>
+            <p style="margin: 20px 0; color: #bdc3c7;">Hôm nay bạn muốn học thêm điều gì mới?</p>
+            <div id="welcome-action-area"></div>
+            <p onclick="handleLogout()" style="margin-top:25px; color: var(--accent); cursor:pointer; font-weight:700; font-size: 14px;">Đăng xuất</p>
+        </div>
+    </div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat-item"><h2>15K+</h2><p>Học viên</p></div>
+    <div class="stat-item"><h2>50+</h2><p>Khóa học</p></div>
+    <div class="stat-item"><h2>120+</h2><p>Bài thi</p></div>
+    <div class="stat-item"><h2>24/7</h2><p>Hỗ trợ</p></div>
+</div>
+
+<script src="../../Js/auth.js"></script>
+<script>
+    const API_URL = 'http://127.0.0.1:5001/api'; 
+
+    function checkAuth() {
+        const userStr = localStorage.getItem('user');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const navAuth = document.getElementById('nav-auth');
+        const loginCard = document.getElementById('home-login-card');
+        const welcomeCard = document.getElementById('home-welcome-card');
+        const actionArea = document.getElementById('welcome-action-area');
+
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            navAuth.innerHTML = `
+                <div class="cart-wrapper" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">${cart.length}</span>
+                </div>
+                <span class="user-info">Chào, ${user.username}</span>
+                <span class="separator">|</span>
+                <button class="btn-logout-nav" onclick="handleLogout()">Đăng xuất</button>
+            `;
+            
+            if(loginCard) loginCard.classList.add('hidden');
+            if(welcomeCard) {
+                welcomeCard.classList.remove('hidden');
+                document.getElementById('display-user-name').innerText = user.username;
+                const role = user.role.toLowerCase().trim();
+                if(role === 'admin') {
+                    actionArea.innerHTML = `<button class="btn-main" onclick="location.href='../admin/dashboard.html'">VÀO QUẢN TRỊ VIÊN</button>`;
+                } else {
+                    actionArea.innerHTML = `<button class="btn-main" onclick="location.href='learning.html'">VÀO HỌC NGAY</button>`;
+                }
+            }
+        } else {
+            navAuth.innerHTML = `<a href="../account/login.html" style="color:#fff; text-decoration:none; font-weight:700; font-size:15px;">Đăng nhập</a>`;
+        }
+    }
+
+    async function handleHomeLogin() {
+        const u = document.getElementById('home_username').value;
+        const p = document.getElementById('home_password').value;
+        if (!u || !p) return alert("Vui lòng nhập đủ thông tin!");
+        try {
+            const res = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json();
+            if (data.status === "success") {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.location.reload(); 
+            } else { alert(data.message); }
+        } catch (err) { alert("Lỗi kết nối Server cổng 5001!"); }
+    }
+
+    function handleLogout() { localStorage.removeItem('user'); window.location.reload(); }
+    window.onload = checkAuth;
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ Hàng | Cyber-LMS Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS HỆ THỐNG ĐỒNG BỘ */
+        :root {
+            --primary: #00d2ff; --secondary: #ff00cc; --accent: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08); --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-gradient: linear-gradient(135deg, #2c1a4d, #c33764); 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: white; min-height: 100vh; }
+
+        /* NAVBAR ĐỒNG BỘ */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 0 8%; height: 80px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 9999; border-bottom: 1px solid var(--glass-border); }
+        .logo { font-weight: 800; font-size: 26px; letter-spacing: 2px; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; cursor: pointer; }
+        .menu { display: flex; gap: 30px; list-style: none; }
+        .menu li { font-size: 15px; font-weight: 600; color: #fff; cursor: pointer; transition: 0.3s; }
+        .menu li:hover { color: var(--primary); }
+        .auth { display: flex; align-items: center; gap: 15px; }
+        .user-name { color: var(--primary); font-weight: bold; font-size: 15px; }
+        .btn-logout { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 7px 20px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; }
+
+        /* BỐ CỤC GIỎ HÀNG */
+        .cart-container { padding: 60px 8%; display: grid; grid-template-columns: 1fr 350px; gap: 40px; }
+        .cart-list h1 { font-size: 32px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .cart-item { background: var(--glass); border-radius: 20px; border: 1px solid var(--glass-border); padding: 20px; display: flex; align-items: center; gap: 20px; margin-bottom: 20px; transition: 0.3s; }
+        .cart-item:hover { border-color: var(--primary); }
+        .cart-item img { width: 120px; height: 70px; border-radius: 10px; object-fit: cover; }
+        .item-info { flex-grow: 1; }
+        .item-info h3 { font-size: 18px; margin-bottom: 5px; }
+        .item-info p { color: var(--primary); font-weight: bold; }
+        .btn-remove { color: #999; cursor: pointer; font-size: 18px; transition: 0.3s; }
+        .btn-remove:hover { color: var(--accent); }
+
+        /* TỔNG KẾT */
+        .summary-box { background: rgba(0,0,0,0.3); border-radius: 25px; border: 1px solid var(--glass-border); padding: 30px; height: fit-content; position: sticky; top: 120px; }
+        .summary-box h2 { font-size: 20px; margin-bottom: 25px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: #ccc; }
+        .total-row { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); font-size: 20px; font-weight: 800; color: #fff; }
+        .btn-checkout { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 25px; transition: 0.3s; }
+        .btn-checkout:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--primary); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">CODELEARN</div>
+  <ul class="menu">
+        <li onclick="location.href='index.html'">Trang chủ</li>
+        <li onclick="location.href='learning.html'">Học tập</li>
+        <li onclick="location.href='training.html'">Luyện tập</li> 
+         <li onclick="location.href='order-history.html'">Lịch Sử Đơn Hàng</li>
+        <li onclick="location.href='event.html'">Sự kiện</li>
+        <li onclick="location.href='about.html'">Giới thiệu</li>
+        <li onclick="location.href='coupon.html'">Mã giám giá</li>
+    </ul>
+    <div class="auth" id="nav-auth"></div>
+</nav>
+
+<div class="cart-container">
+    <div class="cart-list">
+        <h1>Giỏ hàng của bạn</h1>
+        <div id="cartItems">
+            </div>
+    </div>
+
+    <aside class="summary-box">
+        <h2>Tạm tính</h2>
+        <div class="summary-row"><span>Số lượng:</span> <span id="cartCount">0</span></div>
+        <div class="summary-row"><span>Giảm giá:</span> <span>0%</span></div>
+        <div class="total-row"><span>Tổng cộng:</span> <span id="cartTotal">0 đ</span></div>
+        <button class="btn-checkout" onclick="location.href='checkout.html'">Thanh toán ngay</button>
+    </aside>
+</div>
+
+<script>
+    // Logic giỏ hàng
+    function renderCart() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const container = document.getElementById('cartItems');
+        const countDisplay = document.getElementById('cartCount');
+        const totalDisplay = document.getElementById('cartTotal');
+        
+        if (cart.length === 0) {
+            container.innerHTML = `<div style="padding: 50px; text-align:center; opacity: 0.5">Giỏ hàng trống Tuấn ơi!</div>`;
+            countDisplay.innerText = 0;
+            totalDisplay.innerText = "0 đ";
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map((item, index) => {
+            total += parseInt(item.price);
+            return `
+                <div class="cart-item">
+                    <img src="https://placehold.jp/24/34495e/ffffff/120x70.png?text=Course" alt="img">
+                    <div class="item-info">
+                        <h3>${item.title}</h3>
+                        <p>${Number(item.price).toLocaleString('vi-VN')} đ</p>
+                    </div>
+                    <i class="fas fa-trash-alt btn-remove" onclick="removeFromCart(${index})"></i>
+                </div>
+            `;
+        }).join('');
+
+        countDisplay.innerText = cart.length;
+        totalDisplay.innerText = total.toLocaleString('vi-VN') + " đ";
+    }
+
+    function removeFromCart(index) {
+        let cart = JSON.parse(localStorage.getItem('cart'));
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    function syncHeader() {
+        const user = JSON.parse(localStorage.getItem('user')) || { username: 'hocsinh' };
+        document.getElementById('nav-auth').innerHTML = `
+            <span class="user-name">Chào, ${user.username}</span>
+            <span style="color:rgba(255,255,255,0.2); margin: 0 10px;">|</span>
+            <button class="btn-logout" onclick="localStorage.removeItem('user'); location.reload();">Đăng xuất</button>
+        `;
+    }
+
+    window.onload = () => { syncHeader(); renderCart(); };
+</script>
+</body>
+</html>
